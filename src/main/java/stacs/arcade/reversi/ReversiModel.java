@@ -70,40 +70,43 @@ public class ReversiModel {
 	 * is already occupied or if the coordinates are out of range.
 	 */
 	public void makeMove(PlayerColour player, int x, int y) throws IllegalMoveException {
+		if (board[x][y] == null ) {
+			board [x][y] = player;
+		}
 		//for (int i = 0; x < HEIGHT; x++) {
 			//for (int j = 0; y < WIDTH; y++) {
 		//initialMoves();
-				if(board[x][y] == null) {
-					north_west = valid_move (player, -1, -1, x, y);
-					north_north = valid_move (player, -1, 0, x, y);
-					north_east = valid_move (player, -1, 1, x, y);
-					west_west = valid_move (player, 0, -1, x, y);
-					east_east = valid_move (player, 0, 1, x, y);
-					south_west = valid_move (player, 1, -1, x, y);
-					south_south = valid_move (player, 1, 0, x, y);
-					south_east = valid_move (player, 1, 1, x, y);
-					if (north_west || north_north || north_east || west_west || east_east || south_west || south_south || south_east) {
-						board[x][y] = player;
-					}
-				}
+				//if(board[x][y] == null) {
+//					north_west = valid_move (player, -1, -1, x, y);
+//					north_north = valid_move (player, -1, 0, x, y);
+//					north_east = valid_move (player, -1, 1, x, y);
+//					west_west = valid_move (player, 0, -1, x, y);
+//					east_east = valid_move (player, 0, 1, x, y);
+//					south_west = valid_move (player, 1, -1, x, y);
+//					south_south = valid_move (player, 1, 0, x, y);
+//					south_east = valid_move (player, 1, 1, x, y);
+//					if (north_west || north_north || north_east || west_west || east_east || south_west || south_south || south_east) {
+//						board[x][y] = player;
+//					}
+				//}
 
 			//}
 		//}
 	}
 
 	private boolean valid_move(PlayerColour player, int new_x, int new_y, int x, int y) {
-		if (player == PlayerColour.BLACK) {
-			opponent = PlayerColour.WHITE;
-		} else {
-			opponent = PlayerColour.BLACK;
-		}
+//		if (player == PlayerColour.BLACK) {
+//			opponent = PlayerColour.WHITE;
+//		} else {
+//			opponent = PlayerColour.BLACK;
+//		}
 		if((x + new_x < 0) || (x + new_x >= HEIGHT)) {
 			return false;
 		}
 		if((y + new_y < 0) || (y + new_y >= WIDTH)) {
 			return false;
 		}
-		if((board[x + new_x][y + new_y] != opponent)) {
+		if((board[x + new_x][y + new_y] != nextToMove())) {
 			return false;
 		}
 		if((x + new_x + new_x < 0) || (x + new_x + new_x >= HEIGHT)) {
