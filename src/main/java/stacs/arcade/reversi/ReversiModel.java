@@ -12,9 +12,9 @@ public class ReversiModel {
 	private final static int HEIGHT = 8;
 	private final static int WIDTH = 8;
 	private PlayerColour current_Color;
-	private PlayerColour opponent;
-	private int countBlack;
-	private int countWhite;
+	//private PlayerColour opponent;
+	//private int countBlack;
+	//private int countWhite;
 	private boolean north_west, north_north, north_east, west_west, east_east, south_west, south_south, south_east;
 	
     /**
@@ -73,33 +73,36 @@ public class ReversiModel {
 		if (board[x][y] == null ) {
 			board [x][y] = player;
 		}
-		//for (int i = 0; x < HEIGHT; x++) {
-			//for (int j = 0; y < WIDTH; y++) {
-		//initialMoves();
-				//if(board[x][y] == null) {
-//					north_west = valid_move (player, -1, -1, x, y);
-//					north_north = valid_move (player, -1, 0, x, y);
-//					north_east = valid_move (player, -1, 1, x, y);
-//					west_west = valid_move (player, 0, -1, x, y);
-//					east_east = valid_move (player, 0, 1, x, y);
-//					south_west = valid_move (player, 1, -1, x, y);
-//					south_south = valid_move (player, 1, 0, x, y);
-//					south_east = valid_move (player, 1, 1, x, y);
-//					if (north_west || north_north || north_east || west_west || east_east || south_west || south_south || south_east) {
-//						board[x][y] = player;
-//					}
-				//}
+		else {
+			throw new IllegalMoveException("Illegal move");
+		}
+		/*for (int i = 0; x < HEIGHT; x++) {
+			for (int j = 0; y < WIDTH; y++) {
+		initialMoves();
+				if(board[x][y] == null) {
+					north_west = valid_move (player, -1, -1, x, y);
+					north_north = valid_move (player, -1, 0, x, y);
+					north_east = valid_move (player, -1, 1, x, y);
+					west_west = valid_move (player, 0, -1, x, y);
+					east_east = valid_move (player, 0, 1, x, y);
+					south_west = valid_move (player, 1, -1, x, y);
+					south_south = valid_move (player, 1, 0, x, y);
+					south_east = valid_move (player, 1, 1, x, y);
+					if (north_west || north_north || north_east || west_west || east_east || south_west || south_south || south_east) {
+						board[x][y] = player;
+					}
+				}
 
-			//}
-		//}
+			}
+		} */
 	}
 
-	private boolean valid_move(PlayerColour player, int new_x, int new_y, int x, int y) {
-//		if (player == PlayerColour.BLACK) {
-//			opponent = PlayerColour.WHITE;
-//		} else {
-//			opponent = PlayerColour.BLACK;
-//		}
+	/*private boolean valid_move(PlayerColour player, int new_x, int new_y, int x, int y) {
+		if (player == PlayerColour.BLACK) {
+			opponent = PlayerColour.WHITE;
+		} else {
+			opponent = PlayerColour.BLACK;
+		}
 		if((x + new_x < 0) || (x + new_x >= HEIGHT)) {
 			return false;
 		}
@@ -129,13 +132,14 @@ public class ReversiModel {
 			return false;
 		}
 		return check_line_match(player, new_x, new_y, x+new_x, y+new_y);
-	}
+	} */
 
 
 	/**
 	 * Return the number of black stones currently on the board.
 	 */
 	public int getNoBlackStones() {
+		int countBlack = 0;
 		for (int i = 0; i < HEIGHT; i++) {
 			for (int j = 0; j < WIDTH; j++) {
 				if (board[i][j] == PlayerColour.BLACK) {
@@ -150,6 +154,7 @@ public class ReversiModel {
 	 * Return the number of white stones currently on the board.
 	 */
 	public int getNoWhiteStones() {
+		int countWhite = 0;
 		for (int i = 0; i < HEIGHT; i++) {
 			for (int j = 0; j < WIDTH; j++) {
 				if (board[i][j] == PlayerColour.WHITE) {

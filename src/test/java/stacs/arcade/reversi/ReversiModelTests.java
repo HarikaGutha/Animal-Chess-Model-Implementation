@@ -38,7 +38,8 @@ public class ReversiModelTests {
 		assertEquals(this.model.getAt(4, 4), BLACK);
 	}
 	
-	@Test void mustCountStones() throws IllegalMoveException {
+	@Test
+	public void mustCountStones() throws IllegalMoveException {
 		assertEquals(this.model.getNoBlackStones(), 0);
 		assertEquals(this.model.getNoWhiteStones(), 0);
 		this.model.makeMove(BLACK, 4, 4);
