@@ -70,11 +70,8 @@ public class ReversiModel {
 	 * is already occupied or if the coordinates are out of range.
 	 */
 	public void makeMove(PlayerColour player, int x, int y) throws IllegalMoveException {
-	    if ((x < 0) || (y >= WIDTH)) {
-            throw new IllegalMoveException("Illegal move");
-        } else if ((x >= HEIGHT) || (y < 0)) {
-            throw new IllegalMoveException("Illegal move");
-        } else if (board[x][y] == null ) {
+        rejectMoveOutOfBounds(x , y);
+          if (board[x][y] == null ) {
 			board [x][y] = player;
 		} else {
 			throw new IllegalMoveException("Illegal move");
@@ -99,6 +96,13 @@ public class ReversiModel {
 			}
 		} */
 	}
+	private void rejectMoveOutOfBounds(int x , int y) throws IllegalMoveException {
+        if ((x < 0) || (y >= WIDTH)) {
+            throw new IllegalMoveException("Illegal move");
+        } else if ((x >= HEIGHT) || (y < 0)) {
+            throw new IllegalMoveException("Illegal move");
+        }
+    }
 
 	/*private boolean valid_move(PlayerColour player, int new_x, int new_y, int x, int y) {
 		if (player == PlayerColour.BLACK) {
