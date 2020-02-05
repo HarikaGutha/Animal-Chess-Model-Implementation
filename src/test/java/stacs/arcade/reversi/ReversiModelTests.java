@@ -24,6 +24,7 @@ public class ReversiModelTests {
 	}
 	
 	@Test
+	//passes step1
 	public void mustInitialiseEmptyBoard() {
 		for(int x = 0; x < 8; x++) {
 			for(int y = 0; y < 8; y++) {
@@ -32,13 +33,15 @@ public class ReversiModelTests {
 		}
 	}
 	
-	@Test 
+	@Test
+	//passes step2
 	public void mustUpdateBoard() throws IllegalMoveException {
 		this.model.makeMove(BLACK, 4, 4);
 		assertEquals(this.model.getAt(4, 4), BLACK);
 	}
 	
 	@Test
+	//passed step3
 	public void mustCountStones() throws IllegalMoveException {
 		assertEquals(this.model.getNoBlackStones(), 0);
 		assertEquals(this.model.getNoWhiteStones(), 0);
@@ -58,6 +61,7 @@ public class ReversiModelTests {
 	}
 	
 	@Test
+	//passed step3
 	public void mustRejectMoveToOccupiedField() throws IllegalMoveException {
 		this.model.makeMove(BLACK, 4, 4);
 		assertThrows(IllegalMoveException.class, () -> {
@@ -66,6 +70,7 @@ public class ReversiModelTests {
 	}
 	
 	@Test
+	//passed step4
 	public void mustRejectMoveOutOfBounds() {
 		assertThrows(IllegalMoveException.class, () -> {
 			this.model.makeMove(BLACK, 8, 1);	
@@ -89,6 +94,7 @@ public class ReversiModelTests {
 	}
 	
 	@Test
+	//passed step1
 	public void mustAcceptValidInitialMoves() throws IllegalMoveException {		
 		this.model.makeMove(BLACK, 3, 3);
 		this.model.makeMove(WHITE, 3, 4);
