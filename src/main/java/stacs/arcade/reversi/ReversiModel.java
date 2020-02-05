@@ -13,7 +13,6 @@ public class ReversiModel {
 	private final static int WIDTH = 8;
 	private PlayerColour current_Color;
 	private int moveNumber;
-	//private boolean north_west, north_north, north_east, west_west, east_east, south_west, south_south, south_east;
 
     /**
      * Needs a simple constructor, required for construction by the
@@ -48,7 +47,7 @@ public class ReversiModel {
 	/**
 	 * Returns the player who is to move next.
 	 */
-	public PlayerColour nextToMove() {
+	private PlayerColour nextToMove() {
 		if ( current_Color == PlayerColour.BLACK) {
 			return PlayerColour.WHITE;
 		} else {
@@ -67,6 +66,7 @@ public class ReversiModel {
 			rejectInitialMoveOutsideCenterFour(player, x, y);
 		}else if (board[x][y] == null) {
 					board[x][y] = player;
+					enforceTurnTaking(player);
 				} else {
 					throw new IllegalMoveException("Illegal move");
 				}
@@ -77,6 +77,7 @@ public class ReversiModel {
 		if (((x == HEIGHT / 2 - 1) && (y == WIDTH / 2 - 1)) || ((x == HEIGHT / 2 - 1) && (y == WIDTH / 2) || ((x == HEIGHT / 2) && (y == WIDTH / 2 - 1))) || ((x == HEIGHT / 2) && (y == WIDTH / 2))) {
 			board[x][y] = player;
 			moveNumber += 1;
+			enforceTurnTaking(player);
 		} else {
 			throw new IllegalMoveException("Illegal move");
 		}
@@ -90,6 +91,57 @@ public class ReversiModel {
             throw new IllegalMoveException("Illegal move");
         }
     }
+
+    private void enforceTurnTaking(PlayerColour player) throws IllegalMoveException {
+		current_Color = nextToMove();
+		if(current_Color == player) {
+			throw new IllegalMoveException("Invalid player");
+		}
+	}
+
+	/**
+	 * Return the number of black stones currently on the board.
+	 */
+	public int getNoBlackStones() {
+		int countBlack = 0;
+		for (int i = 0; i < HEIGHT; i++) {
+			for (int j = 0; j < WIDTH; j++) {
+				if (board[i][j] == PlayerColour.BLACK) {
+					countBlack += 1;
+				}
+			}
+		}
+		return countBlack;
+	}
+
+	/**
+	 * Return the number of white stones currently on the board.
+	 */
+	public int getNoWhiteStones() {
+		int countWhite = 0;
+		for (int i = 0; i < HEIGHT; i++) {
+			for (int j = 0; j < WIDTH; j++) {
+				if (board[i][j] == PlayerColour.WHITE) {
+					countWhite += 1;
+				}
+			}
+		}
+		return countWhite;
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 		/*for (int i = 0; x < HEIGHT; x++) {
 			for (int j = 0; y < WIDTH; y++) {
@@ -149,34 +201,4 @@ public class ReversiModel {
 	} */
 
 
-	/**
-	 * Return the number of black stones currently on the board.
-	 */
-	public int getNoBlackStones() {
-		int countBlack = 0;
-		for (int i = 0; i < HEIGHT; i++) {
-			for (int j = 0; j < WIDTH; j++) {
-				if (board[i][j] == PlayerColour.BLACK) {
-					countBlack += 1;
-				}
-				}
-			}
-		return countBlack;
-		}
-	
-	/**
-	 * Return the number of white stones currently on the board.
-	 */
-	public int getNoWhiteStones() {
-		int countWhite = 0;
-		for (int i = 0; i < HEIGHT; i++) {
-			for (int j = 0; j < WIDTH; j++) {
-				if (board[i][j] == PlayerColour.WHITE) {
-					countWhite += 1;
-				}
-			}
-		}
-		return countWhite;
-	}
 
-}
