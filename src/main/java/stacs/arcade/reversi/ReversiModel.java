@@ -12,19 +12,17 @@ public class ReversiModel {
 	private final static int HEIGHT = 8;
 	private final static int WIDTH = 8;
 	private PlayerColour current_Color;
-	//private PlayerColour opponent;
-	//private int countBlack;
-	//private int countWhite;
-	private boolean north_west, north_north, north_east, west_west, east_east, south_west, south_south, south_east;
-	
+	private int moveNumber;
+	//private boolean north_west, north_north, north_east, west_west, east_east, south_west, south_south, south_east;
+
     /**
      * Needs a simple constructor, required for construction by the
-     * class that contains the tests. 
+     * class that contains the tests.
      */
-	public ReversiModel() {		
+	public ReversiModel() {
 		initBoard();
 	}
-	
+
 	private void initBoard() {
 		board = new PlayerColour [8][8] ;
 		current_Color = PlayerColour.BLACK;
@@ -33,14 +31,8 @@ public class ReversiModel {
 				board[x][y] = null;
 			}
 		}
+        moveNumber = 0;
 	}
-//	public void initialMoves() {
-//		board[HEIGHT/2 - 1][WIDTH/2 - 1] = PlayerColour.WHITE;
-//		board[HEIGHT/2 - 1][WIDTH/2] = PlayerColour.BLACK;
-//		board[HEIGHT/2][WIDTH/2 - 1] = PlayerColour.BLACK;
-//		board[HEIGHT/2][WIDTH/2] = PlayerColour.WHITE;
-//	}
-
 
 	/**
 	 * Returns the colour of the piece at the given position, null if no piece is on this field.
@@ -52,30 +44,53 @@ public class ReversiModel {
 			return board[x][y];
 		}
 	}
-	
+
 	/**
 	 * Returns the player who is to move next.
 	 */
-	public PlayerColour nextToMove() {		
+	public PlayerColour nextToMove() {
 		if ( current_Color == PlayerColour.BLACK) {
 			return PlayerColour.WHITE;
 		} else {
 			return PlayerColour.BLACK;
 		}
 	}
-	
+
 	/**
 	 * Make a move by placing a piece of the given colour on the given field.
 	 * @throws IllegalMoveException if it is not the player's move, if the field
 	 * is already occupied or if the coordinates are out of range.
 	 */
 	public void makeMove(PlayerColour player, int x, int y) throws IllegalMoveException {
-        rejectMoveOutOfBounds(x , y);
-          if (board[x][y] == null ) {
-			board [x][y] = player;
+		rejectMoveOutOfBounds(x, y);
+		if (moveNumber == 0) {
+			rejectInitialMoveOutsideCenterFour(player, x, y);
+		}else if (board[x][y] == null) {
+					board[x][y] = player;
+				} else {
+					throw new IllegalMoveException("Illegal move");
+				}
+
+		}
+
+	private void rejectInitialMoveOutsideCenterFour(PlayerColour player, int x, int y) throws IllegalMoveException {
+		if (((x == HEIGHT / 2 - 1) && (y == WIDTH / 2 - 1)) || ((x == HEIGHT / 2 - 1) && (y == WIDTH / 2) || ((x == HEIGHT / 2) && (y == WIDTH / 2 - 1))) || ((x == HEIGHT / 2) && (y == WIDTH / 2))) {
+			board[x][y] = player;
+			moveNumber += 1;
 		} else {
 			throw new IllegalMoveException("Illegal move");
 		}
+	}
+
+
+	private void rejectMoveOutOfBounds(int x, int y) throws IllegalMoveException {
+        if ((x < 0) || (y >= WIDTH)) {
+            throw new IllegalMoveException("Illegal move");
+        } else if ((x >= HEIGHT) || (y < 0)) {
+            throw new IllegalMoveException("Illegal move");
+        }
+    }
+
 		/*for (int i = 0; x < HEIGHT; x++) {
 			for (int j = 0; y < WIDTH; y++) {
 		initialMoves();
@@ -95,14 +110,6 @@ public class ReversiModel {
 
 			}
 		} */
-	}
-	private void rejectMoveOutOfBounds(int x , int y) throws IllegalMoveException {
-        if ((x < 0) || (y >= WIDTH)) {
-            throw new IllegalMoveException("Illegal move");
-        } else if ((x >= HEIGHT) || (y < 0)) {
-            throw new IllegalMoveException("Illegal move");
-        }
-    }
 
 	/*private boolean valid_move(PlayerColour player, int new_x, int new_y, int x, int y) {
 		if (player == PlayerColour.BLACK) {

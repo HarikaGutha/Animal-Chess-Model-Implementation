@@ -24,7 +24,7 @@ public class ReversiModelTests {
 	}
 	
 	@Test
-	//passes step1
+	//passed step1
 	public void mustInitialiseEmptyBoard() {
 		for(int x = 0; x < 8; x++) {
 			for(int y = 0; y < 8; y++) {
@@ -34,7 +34,7 @@ public class ReversiModelTests {
 	}
 	
 	@Test
-	//passes step2
+	//passed step2
 	public void mustUpdateBoard() throws IllegalMoveException {
 		this.model.makeMove(BLACK, 4, 4);
 		assertEquals(this.model.getAt(4, 4), BLACK);
@@ -87,6 +87,7 @@ public class ReversiModelTests {
 	}
 	
 	@Test
+	//passed step5
 	public void mustRejectInitialMoveOutsideCenterFour() {
 		assertThrows(IllegalMoveException.class, () -> {
 			this.model.makeMove(BLACK, 1, 1);	
