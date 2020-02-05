@@ -24,7 +24,7 @@ public class ReversiModelTests {
 	}
 	
 	@Test
-	//passed step1
+	//passed commit1
 	public void mustInitialiseEmptyBoard() {
 		for(int x = 0; x < 8; x++) {
 			for(int y = 0; y < 8; y++) {
@@ -34,14 +34,14 @@ public class ReversiModelTests {
 	}
 	
 	@Test
-	//passed step2
+	//passed commit2
 	public void mustUpdateBoard() throws IllegalMoveException {
 		this.model.makeMove(BLACK, 4, 4);
 		assertEquals(this.model.getAt(4, 4), BLACK);
 	}
 	
 	@Test
-	//passed step3
+	//passed commit3
 	public void mustCountStones() throws IllegalMoveException {
 		assertEquals(this.model.getNoBlackStones(), 0);
 		assertEquals(this.model.getNoWhiteStones(), 0);
@@ -54,7 +54,7 @@ public class ReversiModelTests {
 	}
 	
 	@Test
-	//passed step6
+	//passed commit6
 	public void mustEnforceTurnTaking() {
 		assertThrows(IllegalMoveException.class, () -> {
 			this.model.makeMove(WHITE, 4, 4);	
@@ -62,7 +62,7 @@ public class ReversiModelTests {
 	}
 	
 	@Test
-	//passed step3
+	//passed commit3
 	public void mustRejectMoveToOccupiedField() throws IllegalMoveException {
 		this.model.makeMove(BLACK, 4, 4);
 		assertThrows(IllegalMoveException.class, () -> {
@@ -71,7 +71,7 @@ public class ReversiModelTests {
 	}
 	
 	@Test
-	//passed step4
+	//passed commit4
 	public void mustRejectMoveOutOfBounds() {
 		assertThrows(IllegalMoveException.class, () -> {
 			this.model.makeMove(BLACK, 8, 1);	
@@ -88,7 +88,7 @@ public class ReversiModelTests {
 	}
 	
 	@Test
-	//passed step5
+	//passed commit5
 	public void mustRejectInitialMoveOutsideCenterFour() {
 		assertThrows(IllegalMoveException.class, () -> {
 			this.model.makeMove(BLACK, 1, 1);	
@@ -96,7 +96,7 @@ public class ReversiModelTests {
 	}
 	
 	@Test
-	//passed step1
+	//passed commit1
 	public void mustAcceptValidInitialMoves() throws IllegalMoveException {		
 		this.model.makeMove(BLACK, 3, 3);
 		this.model.makeMove(WHITE, 3, 4);
@@ -104,7 +104,8 @@ public class ReversiModelTests {
 		this.model.makeMove(WHITE, 4, 4);
 	}
 	
-	@Test 
+	@Test
+	//passed commit7
 	public void mustRejectMovesThatDoNotCapture() throws IllegalMoveException {
 		this.model.makeMove(BLACK, 3, 3);
 		this.model.makeMove(WHITE, 3, 4);
