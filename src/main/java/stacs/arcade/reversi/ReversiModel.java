@@ -1,222 +1,388 @@
 package stacs.arcade.reversi;
 
+import java.awt.*;
+
 /**
  * Implementation of the model for the Othello game.
- * 
- * @author !your matric number here, not your email address!
+ *
+ * @author 190026870
  */
 public class ReversiModel {
 
-	public enum PlayerColour {BLACK, WHITE}
+    public enum PlayerColour {BLACK, WHITE}
 
-	private PlayerColour[][] board;
-	private final static int HEIGHT = 8;
-	private final static int WIDTH = 8;
-	private PlayerColour currentColour;
-	private int moveNumber;
+    private PlayerColour[][] board;
+    private final static int HEIGHT = 8;
+    private final static int WIDTH = 8;
+    private PlayerColour currentColour;
+    private int moveNumber;
 
-	/**
-	 * Needs a simple constructor, required for construction by the
-	 * class that contains the tests.
-	 */
-	public ReversiModel() {
-		initBoard();
-	}
+    /**
+     * Needs a simple constructor, required for construction by the
+     * class that contains the tests.
+     */
+    public ReversiModel() {
+        initBoard();
+    }
 
-	private void initBoard() {
-		board = new PlayerColour[HEIGHT][WIDTH];
-		currentColour = PlayerColour.BLACK;
-		for (int x = 0; x < HEIGHT; x++) {
-			for (int y = 0; y < WIDTH; y++) {
-				board[x][y] = null;
-			}
-		}
-		moveNumber = 0;
-	}
+    private void initBoard() {
+        board = new PlayerColour[HEIGHT][WIDTH];
+        currentColour = PlayerColour.BLACK;
+        for (int x = 0; x < HEIGHT; x++) {
+            for (int y = 0; y < WIDTH; y++) {
+                board[x][y] = null;
+            }
+        }
+        moveNumber = 0;
+    }
 
-	/**
-	 * Returns the colour of the piece at the given position, null if no piece is on this field.
-	 */
-	public PlayerColour getAt(int x, int y) {
-		if (board[x][y] == null) {
-			return null;
-		} else {
-			return board[x][y];
-		}
-	}
+    /**
+     * Returns the colour of the piece at the given position, null if no piece is on this field.
+     */
+    public PlayerColour getAt(int x, int y) {
+        if (board[x][y] == null) {
+            return null;
+        } else {
+            return board[x][y];
+        }
+    }
 
-	/**
-	 * Returns the player who is to move next.
-	 */
-	private PlayerColour nextToMove() {
-		if (currentColour == PlayerColour.BLACK) {
-			return PlayerColour.WHITE;
-		} else {
-			return PlayerColour.BLACK;
-		}
-	}
+    /**
+     * Returns the player who is to move next.
+     */
+    private PlayerColour nextToMove() {
+        if (currentColour == PlayerColour.BLACK) {
+            return PlayerColour.WHITE;
+        } else {
+            return PlayerColour.BLACK;
+        }
+    }
 
-	/**
-	 * Make a move by placing a piece of the given colour on the given field.
-	 *
-	 * @throws IllegalMoveException if it is not the player's move, if the field
-	 *                              is already occupied or if the coordinates are out of range.
-	 */
-	public void makeMove(PlayerColour player, int x, int y) throws IllegalMoveException {
-		rejectMoveOutOfBounds(x, y);
-		if (moveNumber == 0) {
-			rejectInitialMoveOutsideCenterFour(player, x, y);
-		} else if (board[x][y] == null) {
-			rejectMovesThatDoNotCapture(player, x , y);
-			//enforceTurnTaking(player);
-		} else {
-			throw new IllegalMoveException("Illegal move");
-		}
+    /**
+     * Make a move by placing a piece of the given colour on the given field.
+     *
+     * @throws IllegalMoveException if it is not the player's move, if the field
+     *                              is already occupied or if the coordinates are out of range.
+     */
+    public void makeMove(PlayerColour player, int x, int y) throws IllegalMoveException {
+        rejectMoveOutOfBounds(x, y);
+        if (moveNumber == 0) {
+            rejectInitialMoveOutsideCenterFour(player, x, y);
+        } else if (board[x][y] == null) {
+            rejectMovesThatDoNotCapture(player, x, y);
+            //enforceTurnTaking(player);
+        } else {
+            throw new IllegalMoveException("Illegal move");
+        }
 
-	}
+    }
 
-	private void rejectMovesThatDoNotCapture(PlayerColour player, int x, int y) throws IllegalMoveException {
-		if ((board[x - 1][y-1] != null) || (board[x - 1][y] != null) || (board[x - 1][y + 1] != null) || (board[x][y-1] != null) || (board[x][y + 1] != null) || (board[x + 1][y-1] != null) || (board[x + 1][y] != null) ||(board[x + 1][y + 1] != null)) {
-			board[x][y] = player;
-			executeCapturingMoves(player, x, y);
-			enforceTurnTaking(player);
-		} else {
-			throw  new IllegalMoveException("invalid move");
-		}
-	}
+    /**
+     * rejects the moves that are not captured.
+     *
+     * @param player the current player
+     * @param x      the x coordinate
+     * @param y      the y coordinate
+     * @throws IllegalMoveException throws exception if the field is occupied or invalid coordinates or illegal move
+     */
+    private void rejectMovesThatDoNotCapture(PlayerColour player, int x, int y) throws IllegalMoveException {
+        if ((board[x - 1][y - 1] != null) || (board[x - 1][y] != null) || (board[x - 1][y + 1] != null) || (board[x][y - 1] != null) || (board[x][y + 1] != null) || (board[x + 1][y - 1] != null) || (board[x + 1][y] != null) || (board[x + 1][y + 1] != null)) {
+            board[x][y] = player;
+            executeCapturingMoves(player, x, y);
+            enforceTurnTaking(player);
+        } else {
+            throw new IllegalMoveException("invalid move");
+        }
+    }
 
-	private void rejectInitialMoveOutsideCenterFour(PlayerColour player, int x, int y) throws IllegalMoveException {
-		if (((x == HEIGHT / 2 - 1) && (y == WIDTH / 2 - 1)) || ((x == HEIGHT / 2 - 1) && (y == WIDTH / 2) || ((x == HEIGHT / 2) && (y == WIDTH / 2 - 1))) || ((x == HEIGHT / 2) && (y == WIDTH / 2))) {
-			board[x][y] = player;
-			moveNumber += 1;
-			enforceTurnTaking(player);
-		} else {
-			throw new IllegalMoveException("Illegal move");
-		}
-	}
+    /**
+     * rejects initial moves if they are not placced at center.
+     *
+     * @param player the current player
+     * @param x      the x coordinate
+     * @param y      the y coordinate
+     * @throws IllegalMoveException throws exception if the field is occupied or invalid coordinates or illegal move
+     */
+    private void rejectInitialMoveOutsideCenterFour(PlayerColour player, int x, int y) throws IllegalMoveException {
+        if (((x == HEIGHT / 2 - 1) && (y == WIDTH / 2 - 1)) || ((x == HEIGHT / 2 - 1) && (y == WIDTH / 2) || ((x == HEIGHT / 2) && (y == WIDTH / 2 - 1))) || ((x == HEIGHT / 2) && (y == WIDTH / 2))) {
+            board[x][y] = player;
+            moveNumber += 1;
+            enforceTurnTaking(player);
+        } else {
+            throw new IllegalMoveException("Illegal move");
+        }
+    }
 
+    /**
+     * rejects the moves that are out of the board(bounds)
+     *
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @throws IllegalMoveException throws exception if the field is occupied or invalid coordinates or illegal move
+     */
+    private void rejectMoveOutOfBounds(int x, int y) throws IllegalMoveException {
+        if ((x < 0) || (y >= WIDTH)) {
+            throw new IllegalMoveException("Illegal move");
+        } else if ((x >= HEIGHT) || (y < 0)) {
+            throw new IllegalMoveException("Illegal move");
+        }
+    }
 
-	private void rejectMoveOutOfBounds(int x, int y) throws IllegalMoveException {
-		if ((x < 0) || (y >= WIDTH)) {
-			throw new IllegalMoveException("Illegal move");
-		} else if ((x >= HEIGHT) || (y < 0)) {
-			throw new IllegalMoveException("Illegal move");
-		}
-	}
+    /**
+     * executes the moves that are captured.
+     *
+     * @param player the current player
+     * @param x      the x coordinate
+     * @param y      the y coordinate
+     */
+    private void executeCapturingMoves(PlayerColour player, int x, int y) {
+        if (x <= 1 && y <= 1) {
+            checkCapturingMovesForXAndYLessThanOrEqualToOne(player, x, y);
+        } else if ((x > 1 && x < HEIGHT - 2) && y <= 1) {
+            checkCapturingMovesForXLessThanHeightMinusTwoAndYLessThanOrEqualToOne(player, x, y);
+        } else if ((x >= HEIGHT - 2 && x <= HEIGHT - 1) && y <= 1) {
+            checkCapturingMovesForXLessThanHeightMinusOneAndYLessThanOrEqualToOne(player, x, y);
+        } else if ((y > 1 && y < WIDTH - 2) && x <= 1) {
+            checkCapturingMovesForYLessThanWidthMinusTwoAndXLessThanOrEqualToOne(player, x, y);
+        } else if (x <= 1 && (y >= WIDTH - 2 && y <= WIDTH - 1)) {
+            checkCapturingMovesForYLessThanHeightMinusOneAndXLessThanOrEqualToOne(player, x, y);
+        } else if ((x > 1 && x < HEIGHT - 2) && (y >= WIDTH - 2 && y <= WIDTH - 1)) {
+            checkCapturingMovesForXLessThanHeightMinusTwoAndYGreaterThanWidthMinusTwo(player, x, y);
+        } else if ((x >= HEIGHT - 2 && x <= HEIGHT - 1) && (y >= HEIGHT - 2 && y <= HEIGHT - 1)) {
+            checkCapturingMovesForXAndYLessThanHeightAndWidthMinusOne(player, x, y);
+        } else if ((x >= HEIGHT - 2 && x <= HEIGHT - 1) && (y >= WIDTH - 2 && y <= WIDTH - 1)) {
+            checkCapturingMovesForXGreaterThanHeightMinusTwoAndYLessThanWidthMinusTwo(player, x, y);
+        } else {
+            checkcapturingMovesAtCenterOfTheBoard(player, x, y);
+        }
+    }
 
-	private void executeCapturingMoves(PlayerColour player, int x, int y) {
-		if ((x == 0) || (y >= HEIGHT - 2)) {
-			if ((board[x][y - 1] != player) && board[x][y - 2] == player) {
-				board[x][y - 1] = player;
-			}  else if ((board[x + 1][y] != player) && board[x + 2][y] == player) {
-				board[x + 1][y] = player;
-			}  else if ((board[x + 1][y - 1] != player) && board[x + 2][y - 2] == player) {
-				board[x + 1][y - 1] = player;
-			}
+    /**
+     * chesks the capturing moves for the coordinates x <= 1 && y <= 1.
+     *
+     * @param player the current player
+     * @param x      the x coordinate
+     * @param y      the y coordinate
+     */
+    private void checkCapturingMovesForXAndYLessThanOrEqualToOne(PlayerColour player, int x, int y) {
+        if ((getAt(x, y + 1) != player) && (getAt(x, y + 2) == player)) {
+            board[x][y + 1] = player;
+        } else if ((getAt(x + 1, y) != player) && (getAt(x + 2, y) == player)) {
+            board[x + 1][y] = player;
+        } else if ((getAt(x + 1, y + 1) != player) && (getAt(x + 2, y + 2) == player)) {
+            board[x + 1][y + 1] = player;
+        }
+    }
 
-		} else {
-			 if ((board[x][y + 1] != player) && board[x][y + 2] == player) {
-				board[x][y + 1] = player;
-			} else if ((board[x - 1][y + 1] != player) && board[x - 2][y + 2] == player) {
-				 board[x - 1][y + 1] = player;
-			 } else if ((board[x + 1][y + 1] != player) && board[x + 2][y + 2] == player) {
-				 board[x - 1][y - 1] = player;
-			 } else if ((board[x - 1][y] != player) && board[x - 2][y] == player) {
-				 board[x - 1][y] = player;
-			 } else if ((board[x - 1][y - 1] != player) && board[x - 2][y - 2] == player) {
-				 board[x - 1][y - 1] = player;
-			 }
-		}
-	}
+    /**
+     * checks the capturing moves for the coordinates (x > 1 && x < HEIGHT - 2) && y <= 1.
+     *
+     * @param player the current player
+     * @param x      the x coordinate
+     * @param y      the y coordinate
+     */
+    private void checkCapturingMovesForXLessThanHeightMinusTwoAndYLessThanOrEqualToOne(PlayerColour player, int x, int y) {
+        if ((getAt(x, y + 1) != player) && (getAt(x, y + 2) == player)) {
+            board[x][y + 1] = player;
+        } else if ((getAt(x + 1, y) != player) && (getAt(x + 2, y) == player)) {
+            board[x + 1][y] = player;
+        } else if ((getAt(x + 1, y + 1) != player) && (getAt(x + 2, y + 2) == player)) {
+            board[x + 1][y + 1] = player;
+        } else if ((getAt(x - 1, y) != player) && (getAt(x - 2, y) == player)) {
+            board[x - 1][y] = player;
+        } else if ((getAt(x - 1, y + 1) != player) && (getAt(x - 2, y + 2) == player)) {
+            board[x - 1][y + 1] = player;
+        }
+    }
 
-	private void enforceTurnTaking(PlayerColour player) throws IllegalMoveException {
-		currentColour = nextToMove();
-		if (currentColour == player) {
-			throw new IllegalMoveException("Invalid player");
-		}
-	}
+    /**
+     * checks the capturing moves for the coordinates (x >= HEIGHT - 2 && x <= HEIGHT - 1) && y <= 1.
+     *
+     * @param player the current player
+     * @param x      the x coordinate
+     * @param y      the y coordinate
+     */
+    private void checkCapturingMovesForXLessThanHeightMinusOneAndYLessThanOrEqualToOne(PlayerColour player, int x, int y) {
+        if ((getAt(x - 1, y) != player) && (getAt(x - 2, y) == player)) {
+            board[x - 1][y] = player;
+        } else if ((getAt(x - 1, y + 1) != player) && (getAt(x - 2, y + 2) == player)) {
+            board[x - 1][y + 1] = player;
+        } else if ((getAt(x, y + 1) != player) && (getAt(x, y + 2) == player)) {
+            board[x][y + 1] = player;
+        }
+    }
 
-	/**
-	 * Return the number of black stones currently on the board.
-	 */
-	public int getNoBlackStones() {
-		int countBlack = 0;
-		for (int i = 0; i < HEIGHT; i++) {
-			for (int j = 0; j < WIDTH; j++) {
-				if (board[i][j] == PlayerColour.BLACK) {
-					countBlack += 1;
-				}
-			}
-		}
-		return countBlack;
-	}
+    /**
+     * checks the capturing moves for the coordinates (y > 1 && y < WIDTH - 2) && x <= 1.
+     *
+     * @param player the current player
+     * @param x      the x coordinate
+     * @param y      the y coordinate
+     */
+    private void checkCapturingMovesForYLessThanWidthMinusTwoAndXLessThanOrEqualToOne(PlayerColour player, int x, int y) {
+        if ((getAt(x + 1, y) != player) && (getAt(x + 2, y) == player)) {
+            board[x + 1][y] = player;
+        } else if ((getAt(x + 1, y + 1) != player) && (getAt(x + 2, y + 2) == player)) {
+            board[x + 1][y + 1] = player;
+        } else if ((getAt(x, y - 1) != player) && getAt(x, y - 2) == player) {
+            board[x][y - 1] = player;
+        } else if ((getAt(x, y + 1) != player) && getAt(x, y + 2) == player) {
+            board[x][y + 1] = player;
+        } else if ((getAt(x + 1, y - 1) != player) && getAt(x + 2, y - 2) == player) {
+            board[x + 1][y - 1] = player;
+        }
+    }
 
-	/**
-	 * Return the number of white stones currently on the board.
-	 */
-	public int getNoWhiteStones() {
-		int countWhite = 0;
-		for (int i = 0; i < HEIGHT; i++) {
-			for (int j = 0; j < WIDTH; j++) {
-				if (board[i][j] == PlayerColour.WHITE) {
-					countWhite += 1;
-				}
-			}
-		}
-		return countWhite;
-	}
+    /**
+     * checks the capturing moves for the coordinates x <= 1 && (y >= WIDTH - 2 && y <= WIDTH - 1).
+     *
+     * @param player the current player
+     * @param x      the x coordinate
+     * @param y      the y coordinate
+     */
+    private void checkCapturingMovesForYLessThanHeightMinusOneAndXLessThanOrEqualToOne(PlayerColour player, int x, int y) {
+        if ((getAt(x, y - 1) != player) && getAt(x, y - 2) == player) {
+            board[x][y - 1] = player;
+        } else if ((getAt(x + 1, y) != player) && (getAt(x + 2, y) == player)) {
+            board[x + 1][y] = player;
+        } else if ((getAt(x + 1, y - 1) != player) && getAt(x + 2, y - 2) == player) {
+            board[x + 1][y - 1] = player;
+        }
+    }
+
+    /**
+     * checks the capturing moves for the coordinates (x > 1 && x < HEIGHT - 2) && (y >= WIDTH - 2 && y <= WIDTH - 1).
+     *
+     * @param player the current player
+     * @param x      the x coordinate
+     * @param y      the y coordinate
+     */
+    private void checkCapturingMovesForXLessThanHeightMinusTwoAndYGreaterThanWidthMinusTwo(PlayerColour player, int x, int y) {
+        if ((getAt(x, y - 1) != player) && getAt(x, y - 2) == player) {
+            board[x][y - 1] = player;
+        } else if ((getAt(x - 1, y) != player) && (getAt(x - 2, y) == player)) {
+            board[x - 1][y] = player;
+        } else if ((getAt(x + 1, y) != player) && (getAt(x + 2, y) == player)) {
+            board[x + 1][y] = player;
+        } else if ((getAt(x - 1, y - 1) != player) && (getAt(x - 2, y - 2) == player)) {
+            board[x - 1][y - 1] = player;
+        } else if ((getAt(x + 1, y - 1) != player) && (getAt(x + 2, y - 2) == player)) {
+            board[x + 1][y - 1] = player;
+        }
+    }
+
+    /**
+     * checks the capturing moves for the coordinates (x >= HEIGHT - 2 && x <= HEIGHT - 1) && (y >= HEIGHT - 2 && y <= HEIGHT - 1).
+     *
+     * @param player the current player
+     * @param x      the x coordinate
+     * @param y      the y coordinate
+     */
+    private void checkCapturingMovesForXAndYLessThanHeightAndWidthMinusOne(PlayerColour player, int x, int y) {
+        if ((getAt(x, y - 1) != player) && getAt(x, y - 2) == player) {
+            board[x][y - 1] = player;
+        } else if ((getAt(x - 1, y) != player) && (getAt(x - 2, y) == player)) {
+            board[x - 1][y] = player;
+        } else if ((getAt(x - 1, y - 1) != player) && (getAt(x - 2, y - 2) == player)) {
+            board[x - 1][y - 1] = player;
+        }
+    }
+
+    /**
+     * checks the capturing moves for the coordinates (x >= HEIGHT - 2 && x <= HEIGHT - 1) && (y >= WIDTH - 2 && y <= WIDTH - 1).
+     *
+     * @param player the current player
+     * @param x      the x coordinate
+     * @param y      the y coordinate
+     */
+    private void checkCapturingMovesForXGreaterThanHeightMinusTwoAndYLessThanWidthMinusTwo(PlayerColour player, int x, int y) {
+        if ((getAt(x, y - 1) != player) && getAt(x, y - 2) == player) {
+            board[x][y - 1] = player;
+        } else if ((getAt(x - 1, y) != player) && (getAt(x - 2, y) == player)) {
+            board[x - 1][y] = player;
+        } else if ((getAt(x - 1, y - 1) != player) && (getAt(x - 2, y - 2) == player)) {
+            board[x - 1][y - 1] = player;
+        } else if ((getAt(x, y + 1) != player) && getAt(x, y + 2) == player) {
+            board[x][y + 1] = player;
+        } else if ((getAt(x - 1, y + 1) != player) && (getAt(x - 2, y + 2) == player)) {
+            board[x - 1][y + 1] = player;
+        }
+    }
+
+    /**
+     * checks the capturing moves that are at the center of the board (other than previously checked conditions.
+     *
+     * @param player the current player
+     * @param x      the x coordinate
+     * @param y      the y coordinate
+     */
+    private void checkcapturingMovesAtCenterOfTheBoard(PlayerColour player, int x, int y) {
+        if ((getAt(x, y - 1) != player) && (getAt(x, y - 2) == player)) {
+            board[x][y - 1] = player;
+        } else if ((getAt(x + 1, y) != player) && (getAt(x + 2, y) == player)) {
+            board[x + 1][y] = player;
+        } else if ((getAt(x + 1, y - 1) != player) && (getAt(x + 2, y - 2)) == player) {
+            board[x + 1][y - 1] = player;
+        } else if ((getAt(x, y - 1) != player) && (getAt(x, y - 2) == player)) {
+            board[x][y - 1] = player;
+        } else if ((getAt(x + 1, y) != player) && (getAt(x + 2, y) == player)) {
+            board[x + 1][y] = player;
+        } else if ((getAt(x + 1, y - 1) != player) && (getAt(x + 2, y - 2) == player)) {
+            board[x + 1][y - 1] = player;
+        } else if ((getAt(x, y + 1) != player) && (getAt(x, y + 2) == player)) {
+            board[x][y + 1] = player;
+        } else if ((getAt(x - 1, y + 1) != player) && (getAt(x - 2, y + 2) == player)) {
+            board[x - 1][y + 1] = player;
+        } else if ((getAt(x + 1, y + 1) != player) && (getAt(x + 2, y + 2) == player)) {
+            board[x - 1][y - 1] = player;
+        } else if ((getAt(x - 1, y) != player) && getAt(x - 2, y) == player) {
+            board[x - 1][y] = player;
+        } else if ((getAt(x - 1, y - 1) != player) && getAt(x - 2, y - 2) == player) {
+            board[x - 1][y - 1] = player;
+        }
+    }
+
+    /**
+     * enforces the turn taking.
+     *
+     * @param player the current player
+     * @throws IllegalMoveException throws exception if the field is occupied or invalid coordinates or illegal move
+     */
+    private void enforceTurnTaking(PlayerColour player) throws IllegalMoveException {
+        currentColour = nextToMove();
+        if (currentColour == player) {
+            throw new IllegalMoveException("Invalid player");
+        }
+    }
+
+    /**
+     * Return the number of black stones currently on the board.
+     */
+    public int getNoBlackStones() {
+        int countBlack = 0;
+        for (int i = 0; i < HEIGHT; i++) {
+            for (int j = 0; j < WIDTH; j++) {
+                if (board[i][j] == PlayerColour.BLACK) {
+                    countBlack += 1;
+                }
+            }
+        }
+        return countBlack;
+    }
+
+    /**
+     * Return the number of white stones currently on the board.
+     */
+    public int getNoWhiteStones() {
+        int countWhite = 0;
+        for (int i = 0; i < HEIGHT; i++) {
+            for (int j = 0; j < WIDTH; j++) {
+                if (board[i][j] == PlayerColour.WHITE) {
+                    countWhite += 1;
+                }
+            }
+        }
+        return countWhite;
+    }
 
 }
-
-
-
-/*
-	private void checkValidMoves(PlayerColour player, int x, int y) {
-		boolean north_west = valid_move(player, -1, -1, x, y);
-		boolean north_north = valid_move(player, -1, 0, x, y);
-		boolean north_east = valid_move(player, -1, 1, x, y);
-		boolean west_west = valid_move(player, 0, -1, x, y);
-		boolean east_east = valid_move(player, 0, 1, x, y);
-		boolean south_west = valid_move(player, 1, -1, x, y);
-		boolean south_south = valid_move(player, 1, 0, x, y);
-		boolean south_east = valid_move(player, 1, 1, x, y);
-		if (north_west || north_north || north_east || west_west || east_east || south_west || south_south || south_east) {
-			board[x][y] = player;
-		}
-	}
-
-	private boolean valid_move(PlayerColour player, int new_x, int new_y, int x, int y) {
-		if ((x + new_x < 0) || (x + new_x >= HEIGHT)) {
-			return false;
-		}
-		if ((y + new_y < 0) || (y + new_y >= WIDTH)) {
-			return false;
-		}
-		if ((board[x + new_x][y + new_y] != nextToMove())) {
-			return false;
-		}
-		if ((x + new_x + new_x < 0) || (x + new_x + new_x >= HEIGHT)) {
-			return false;
-		}
-		if ((y + new_y + new_y < 0) || (y + new_y + new_y >= WIDTH)) {
-			return false;
-		}
-		return check_line_match(player, new_x, new_y, x + new_x + new_x, y + new_y + new_y);
-	}
-
-	private boolean check_line_match(PlayerColour player, int new_x, int new_y, int x, int y) {
-		if (board[x][y] == player) {
-			return true;
-		}
-		if ((x + new_x < 0) || (x + new_x >= HEIGHT)) {
-			return false;
-		}
-		if ((y + new_y < 0) || (y + new_y >= WIDTH)) {
-			return false;
-		}
-		return check_line_match(player, new_x, new_y, x + new_x, y + new_y);
-	}
-*/
-
-
-
