@@ -148,9 +148,9 @@ public class ReversiModel {
             checkCapturingMovesForYLessThanHeightMinusOneAndXLessThanOrEqualToOne(player, x, y);
         } else if ((x > 1 && x < HEIGHT - 2) && (y >= WIDTH - 2 && y <= WIDTH - 1)) {
             checkCapturingMovesForXLessThanHeightMinusTwoAndYGreaterThanWidthMinusTwo(player, x, y);
-        } else if ((x >= HEIGHT - 2 && x <= HEIGHT - 1) && (y >= HEIGHT - 2 && y <= HEIGHT - 1)) {
-            checkCapturingMovesForXAndYLessThanHeightAndWidthMinusOne(player, x, y);
         } else if ((x >= HEIGHT - 2 && x <= HEIGHT - 1) && (y >= WIDTH - 2 && y <= WIDTH - 1)) {
+            checkCapturingMovesForXAndYLessThanHeightAndWidthMinusOne(player, x, y);
+        } else if ((x >= HEIGHT - 2 && x <= HEIGHT - 1) && (y > 1 && y < WIDTH - 2)) {
             checkCapturingMovesForXGreaterThanHeightMinusTwoAndYLessThanWidthMinusTwo(player, x, y);
         } else {
             checkcapturingMovesAtCenterOfTheBoard(player, x, y);
@@ -279,7 +279,7 @@ public class ReversiModel {
      * @param y      the y coordinate
      */
     private void checkCapturingMovesForXAndYLessThanHeightAndWidthMinusOne(PlayerColour player, int x, int y) {
-        if ((getAt(x, y - 1) != player) && getAt(x, y - 2) == player) {
+       if ((getAt(x, y - 1) != player) && getAt(x, y - 2) == player) {
             board[x][y - 1] = player;
         } else if ((getAt(x - 1, y) != player) && (getAt(x - 2, y) == player)) {
             board[x - 1][y] = player;
