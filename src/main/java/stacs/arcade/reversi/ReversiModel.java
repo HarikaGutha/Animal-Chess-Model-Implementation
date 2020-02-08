@@ -50,7 +50,7 @@ public class ReversiModel {
     /**
      * Returns the player who is to move next.
      */
-    private PlayerColour nextToMove() {
+     private PlayerColour nextToMove() {
         if (currentColour == PlayerColour.BLACK) {
             return PlayerColour.WHITE;
         } else {
@@ -70,7 +70,6 @@ public class ReversiModel {
             rejectInitialMoveOutsideCenterFour(player, x, y);
         } else if (board[x][y] == null) {
             rejectMovesThatDoNotCapture(player, x, y);
-            //enforceTurnTaking(player);
         } else {
             throw new IllegalMoveException("Illegal move");
         }
@@ -279,7 +278,7 @@ public class ReversiModel {
      * @param y      the y coordinate
      */
     private void checkCapturingMovesForXAndYLessThanHeightAndWidthMinusOne(PlayerColour player, int x, int y) {
-       if ((getAt(x, y - 1) != player) && getAt(x, y - 2) == player) {
+        if ((getAt(x, y - 1) != player) && getAt(x, y - 2) == player) {
             board[x][y - 1] = player;
         } else if ((getAt(x - 1, y) != player) && (getAt(x - 2, y) == player)) {
             board[x - 1][y] = player;
@@ -348,7 +347,7 @@ public class ReversiModel {
      * @param player the current player
      * @throws IllegalMoveException throws exception if the field is occupied or invalid coordinates or illegal move
      */
-    private void enforceTurnTaking(PlayerColour player) throws IllegalMoveException {
+     private void enforceTurnTaking(PlayerColour player) throws IllegalMoveException {
         currentColour = nextToMove();
         if (currentColour == player) {
             throw new IllegalMoveException("Invalid player");
