@@ -21,7 +21,7 @@ class ReversiModelAdditionalTest {
         this.model.makeMove(WHITE, 3, 4);
         this.model.makeMove(BLACK, 4, 3);
         this.model.makeMove(WHITE, 4, 4);
-        assertEquals(this.model.getAt(4,3), BLACK);
+        assertEquals(this.model.getAt(4, 3), BLACK);
     }
 
     @Test
@@ -50,7 +50,7 @@ class ReversiModelAdditionalTest {
         this.model.makeMove(BLACK, 4, 5);
         //(4,5) flips to WHITE
         this.model.makeMove(WHITE, 5, 6);
-        assertEquals(this.model.getNoWhiteStones(),3);
+        assertEquals(this.model.getNoWhiteStones(), 3);
 
     }
 }
