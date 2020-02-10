@@ -124,9 +124,9 @@ class ReversiModelAdditionalTest {
         this.model.makeMove(WHITE, 3, 4);
         this.model.makeMove(BLACK, 4, 3);
         this.model.makeMove(WHITE, 4, 4);
-        this.model.makeMove(BLACK, 4, 5);
-        this.model.makeMove(WHITE, 5, 6);
-        this.model.makeMove(BLACK, 6, 7);
-        assertEquals(this.model.getAt(5, 6), BLACK);
+        this.model.makeMove(BLACK, 3, 5);
+        this.model.makeMove(WHITE, 4, 6);
+        this.model.makeMove(BLACK, 5, 7);
+        assertEquals(this.model.getAt(4, 6), BLACK);
     }
 }
