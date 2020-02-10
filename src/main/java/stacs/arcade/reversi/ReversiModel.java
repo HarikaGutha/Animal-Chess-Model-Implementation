@@ -96,7 +96,11 @@ public class ReversiModel {
             if ((getAt(x - 1, y) != null) || (getAt(x - 1, y + 1) != null) || (getAt(x, y + 1) != null)) {
                 commonCode(player,x,y);
             }
+        }  else if ((y > 1 && y < WIDTH - 2) && x <= 1) {
+        if ((getAt(x + 1, y) != null) || (getAt(x + 1, y + 1) != null) || (getAt(x, y - 1) != null) || (getAt(x, y + 1) != null) || (getAt(x + 1, y - 1) != null)) {
+           commonCode(player, x, y);
         }
+   }
         else {
 
             if ((getAt(x - 1, y - 1) != null) || (getAt(x - 1, y) != null) || (getAt(x - 1, y + 1) != null) || (getAt(x, y - 1) != null) || (getAt(x, y + 1) != null) || (getAt(x + 1, y - 1) != null) || (getAt(x + 1, y) != null) || (getAt(x + 1, y + 1) != null)) {
