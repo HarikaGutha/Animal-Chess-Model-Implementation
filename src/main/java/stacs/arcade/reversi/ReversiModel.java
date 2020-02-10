@@ -83,13 +83,24 @@ public class ReversiModel {
      * @throws IllegalMoveException throws exception if the field is occupied or invalid coordinates or illegal move
      */
     private void rejectMovesThatDoNotCapture(PlayerColour player, int x, int y) throws IllegalMoveException {
-                if ((getAt(x - 1,y - 1) != null) || (getAt(x - 1,y) != null) || (getAt(x - 1,y + 1) != null) || (getAt(x,y - 1) != null) || (getAt(x,y + 1) != null) || (getAt(x + 1,y - 1) != null) || (getAt(x + 1, y) != null) || (getAt(x + 1,y + 1) != null)) {
-            board[x][y] = player;
-            executeCapturingMoves(player, x, y);
-            enforceTurnTaking(player);
-        }  else {
-            throw new IllegalMoveException("invalid move");
-        } }
+        if (x < 1 && y < 1) {
+            if ((getAt(x, y + 1) != null) || (getAt(x + 1, y) != null) || getAt(x + 1, y + 1) != null) {
+                commonCode(player,x,y);
+            }
+        } else {
+
+            if ((getAt(x - 1, y - 1) != null) || (getAt(x - 1, y) != null) || (getAt(x - 1, y + 1) != null) || (getAt(x, y - 1) != null) || (getAt(x, y + 1) != null) || (getAt(x + 1, y - 1) != null) || (getAt(x + 1, y) != null) || (getAt(x + 1, y + 1) != null)) {
+                commonCode(player,x,y);
+            } else {
+                throw new IllegalMoveException("invalid move");
+            }
+        }
+    }
+    private void commonCode(PlayerColour player, int x, int y) throws IllegalMoveException {
+        board[x][y] = player;
+        executeCapturingMoves(player, x, y);
+        enforceTurnTaking(player);
+    }
 
 
     /**
