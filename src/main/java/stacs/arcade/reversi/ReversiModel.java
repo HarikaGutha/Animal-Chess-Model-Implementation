@@ -97,7 +97,8 @@ public class ReversiModel {
                 commonCode(player, x, y);
             }
         } else if ((y > 1 && y < WIDTH - 2) && x <= 1) {
-            if ((getAt(x + 1, y) != null) || (getAt(x + 1, y + 1) != null) || (getAt(x, y - 1) != null) || (getAt(x, y + 1) != null) || (getAt(x + 1, y - 1) != null)) {
+            if ((getAt(x + 1, y) != null) || (getAt(x + 1, y + 1) != null) || (getAt(x, y - 1) != null)
+                    || (getAt(x, y + 1) != null) || (getAt(x + 1, y - 1) != null)) {
                 commonCode(player, x, y);
             }
         } else if (x <= 1 && (y >= WIDTH - 2 && y <= WIDTH - 1)) {
@@ -106,7 +107,9 @@ public class ReversiModel {
             }
         } else {
 
-            if ((getAt(x - 1, y - 1) != null) || (getAt(x - 1, y) != null) || (getAt(x - 1, y + 1) != null) || (getAt(x, y - 1) != null) || (getAt(x, y + 1) != null) || (getAt(x + 1, y - 1) != null) || (getAt(x + 1, y) != null) || (getAt(x + 1, y + 1) != null)) {
+            if ((getAt(x - 1, y - 1) != null) || (getAt(x - 1, y) != null) || (getAt(x - 1, y + 1) != null)
+                    || (getAt(x, y - 1) != null) || (getAt(x, y + 1) != null) || (getAt(x + 1, y - 1) != null)
+                    || (getAt(x + 1, y) != null) || (getAt(x + 1, y + 1) != null)) {
                 commonCode(player, x, y);
             } else {
                 throw new IllegalMoveException("invalid move");
