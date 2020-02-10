@@ -85,45 +85,44 @@ public class ReversiModel {
     private void rejectMovesThatDoNotCapture(PlayerColour player, int x, int y) throws IllegalMoveException {
         if (x < 1 && y < 1) {
             if ((getAt(x, y + 1) != null) || (getAt(x + 1, y) != null) || getAt(x + 1, y + 1) != null) {
-                commonCode(player, x, y);
+                commonCodeForRejectMovesThatDoNotCapture(player, x, y);
             }
         } else if ((x > 1 && x < HEIGHT - 2) && y <= 1) {
             if ((getAt(x, y + 1) != null) || (getAt(x + 1, y) != null) || (getAt(x + 1, y + 1) != null)
                     || (getAt(x - 1, y) != null) || (getAt(x - 1, y + 1) != null)) {
-                commonCode(player, x, y);
+                commonCodeForRejectMovesThatDoNotCapture(player, x, y);
             }
         } else if ((x >= HEIGHT - 2 && x <= HEIGHT - 1) && y <= 1) {
             if ((getAt(x - 1, y) != null) || (getAt(x - 1, y + 1) != null) || (getAt(x, y + 1) != null)) {
-                commonCode(player, x, y);
+                commonCodeForRejectMovesThatDoNotCapture(player, x, y);
             }
         } else if ((y > 1 && y < WIDTH - 2) && x <= 1) {
             if ((getAt(x + 1, y) != null) || (getAt(x + 1, y + 1) != null) || (getAt(x, y - 1) != null)
                     || (getAt(x, y + 1) != null) || (getAt(x + 1, y - 1) != null)) {
-                commonCode(player, x, y);
+                commonCodeForRejectMovesThatDoNotCapture(player, x, y);
             }
         } else if (x <= 1 && (y >= WIDTH - 2 && y <= WIDTH - 1)) {
             if ((getAt(x, y - 1) != null) || (getAt(x + 1, y) != null) || (getAt(x + 1, y - 1) != null)) {
-                commonCode(player, x, y);
+                commonCodeForRejectMovesThatDoNotCapture(player, x, y);
             }
         } else if ((x > 1 && x < HEIGHT - 2) && (y >= WIDTH - 2 && y <= WIDTH - 1)) {
             if ((getAt(x, y - 1) != null) || (getAt(x - 1, y) != null) || (getAt(x + 1, y) != null)
                     || (getAt(x - 1, y - 1) != null) || (getAt(x + 1, y - 1) != null)) {
-                commonCode(player, x, y);
+                commonCodeForRejectMovesThatDoNotCapture(player, x, y);
             }
-        }
-        else {
+        } else {
 
             if ((getAt(x - 1, y - 1) != null) || (getAt(x - 1, y) != null) || (getAt(x - 1, y + 1) != null)
                     || (getAt(x, y - 1) != null) || (getAt(x, y + 1) != null) || (getAt(x + 1, y - 1) != null)
                     || (getAt(x + 1, y) != null) || (getAt(x + 1, y + 1) != null)) {
-                commonCode(player, x, y);
+                commonCodeForRejectMovesThatDoNotCapture(player, x, y);
             } else {
                 throw new IllegalMoveException("invalid move");
             }
         }
     }
 
-    private void commonCode(PlayerColour player, int x, int y) throws IllegalMoveException {
+    private void commonCodeForRejectMovesThatDoNotCapture(PlayerColour player, int x, int y) throws IllegalMoveException {
         board[x][y] = player;
         executeCapturingMoves(player, x, y);
         enforceTurnTaking(player);
@@ -139,7 +138,8 @@ public class ReversiModel {
      * @throws IllegalMoveException throws exception if the field is occupied or invalid coordinates or illegal move
      */
     private void rejectInitialMoveOutsideCenterFour(PlayerColour player, int x, int y) throws IllegalMoveException {
-        if (((x == HEIGHT / 2 - 1) && (y == WIDTH / 2 - 1)) || ((x == HEIGHT / 2 - 1) && (y == WIDTH / 2) || ((x == HEIGHT / 2) && (y == WIDTH / 2 - 1))) || ((x == HEIGHT / 2) && (y == WIDTH / 2))) {
+        if (((x == HEIGHT / 2 - 1) && (y == WIDTH / 2 - 1)) || ((x == HEIGHT / 2 - 1) && (y == WIDTH / 2)
+                || ((x == HEIGHT / 2) && (y == WIDTH / 2 - 1))) || ((x == HEIGHT / 2) && (y == WIDTH / 2))) {
             board[x][y] = player;
             moveNumber += 1;
             enforceTurnTaking(player);
@@ -210,7 +210,8 @@ public class ReversiModel {
     }
 
     /**
-     * checks the capturing moves for the coordinates (x > 1 && x < HEIGHT - 2) && y <= 1.
+     * checks the capturing moves for the coordinates
+     * (x > 1 && x < HEIGHT - 2) && y <= 1.
      *
      * @param player the current player
      * @param x      the x coordinate
@@ -231,7 +232,8 @@ public class ReversiModel {
     }
 
     /**
-     * checks the capturing moves for the coordinates (x >= HEIGHT - 2 && x <= HEIGHT - 1) && y <= 1.
+     * checks the capturing moves for the coordinates
+     * (x >= HEIGHT - 2 && x <= HEIGHT - 1) && y <= 1.
      *
      * @param player the current player
      * @param x      the x coordinate
@@ -248,7 +250,8 @@ public class ReversiModel {
     }
 
     /**
-     * checks the capturing moves for the coordinates (y > 1 && y < WIDTH - 2) && x <= 1.
+     * checks the capturing moves for the coordinates
+     * (y > 1 && y < WIDTH - 2) && x <= 1.
      *
      * @param player the current player
      * @param x      the x coordinate
@@ -269,7 +272,8 @@ public class ReversiModel {
     }
 
     /**
-     * checks the capturing moves for the coordinates x <= 1 && (y >= WIDTH - 2 && y <= WIDTH - 1).
+     * checks the capturing moves for the coordinates
+     * x <= 1 && (y >= WIDTH - 2 && y <= WIDTH - 1).
      *
      * @param player the current player
      * @param x      the x coordinate
@@ -286,7 +290,8 @@ public class ReversiModel {
     }
 
     /**
-     * checks the capturing moves for the coordinates (x > 1 && x < HEIGHT - 2) && (y >= WIDTH - 2 && y <= WIDTH - 1).
+     * checks the capturing moves for the coordinates
+     * (x > 1 && x < HEIGHT - 2) && (y >= WIDTH - 2 && y <= WIDTH - 1).
      *
      * @param player the current player
      * @param x      the x coordinate
@@ -307,7 +312,8 @@ public class ReversiModel {
     }
 
     /**
-     * checks the capturing moves for the coordinates (x >= HEIGHT - 2 && x <= HEIGHT - 1) && (y >= HEIGHT - 2 && y <= HEIGHT - 1).
+     * checks the capturing moves for the coordinates
+     * (x >= HEIGHT - 2 && x <= HEIGHT - 1) && (y >= HEIGHT - 2 && y <= HEIGHT - 1).
      *
      * @param player the current player
      * @param x      the x coordinate
@@ -324,7 +330,8 @@ public class ReversiModel {
     }
 
     /**
-     * checks the capturing moves for the coordinates (x >= HEIGHT - 2 && x <= HEIGHT - 1) && (y >= WIDTH - 2 && y <= WIDTH - 1).
+     * checks the capturing moves for the coordinates
+     * (x >= HEIGHT - 2 && x <= HEIGHT - 1) && (y >= WIDTH - 2 && y <= WIDTH - 1).
      *
      * @param player the current player
      * @param x      the x coordinate
