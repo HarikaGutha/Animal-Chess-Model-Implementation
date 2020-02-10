@@ -61,6 +61,7 @@ class ReversiModelAdditionalTest {
         this.model.makeMove(WHITE, 3, 4);
         this.model.makeMove(BLACK, 4, 3);
         this.model.makeMove(WHITE, 4, 4);
+
         this.model.makeMove(BLACK, 2, 2);
         this.model.makeMove(WHITE, 1, 1);
         this.model.makeMove(BLACK, 0, 0);
@@ -73,13 +74,11 @@ class ReversiModelAdditionalTest {
         this.model.makeMove(WHITE, 3, 4);
         this.model.makeMove(BLACK, 4, 3);
         this.model.makeMove(WHITE, 4, 4);
+
         this.model.makeMove(BLACK, 3, 2);
         this.model.makeMove(WHITE, 3, 1);
         this.model.makeMove(BLACK, 3, 0);
         assertEquals(this.model.getAt(3, 1), BLACK);
-        //this.model.makeMove(BLACK,3,5);
-        //this.model.makeMove(WHITE,2,6);
-        //assertEquals(this.model.getAt(3,5), WHITE);
     }
 
     @Test
@@ -88,6 +87,7 @@ class ReversiModelAdditionalTest {
         this.model.makeMove(WHITE, 3, 4);
         this.model.makeMove(BLACK, 4, 3);
         this.model.makeMove(WHITE, 4, 4);
+
         this.model.makeMove(BLACK, 5, 2);
         this.model.makeMove(WHITE, 6, 1);
         this.model.makeMove(BLACK, 7, 0);
@@ -112,6 +112,7 @@ class ReversiModelAdditionalTest {
         this.model.makeMove(WHITE, 3, 4);
         this.model.makeMove(BLACK, 4, 3);
         this.model.makeMove(WHITE, 4, 4);
+
         this.model.makeMove(BLACK, 2, 5);
         this.model.makeMove(WHITE, 1, 6);
         this.model.makeMove(BLACK, 0, 7);
@@ -124,9 +125,23 @@ class ReversiModelAdditionalTest {
         this.model.makeMove(WHITE, 3, 4);
         this.model.makeMove(BLACK, 4, 3);
         this.model.makeMove(WHITE, 4, 4);
+
         this.model.makeMove(BLACK, 3, 5);
         this.model.makeMove(WHITE, 4, 6);
         this.model.makeMove(BLACK, 5, 7);
         assertEquals(this.model.getAt(4, 6), BLACK);
+    }
+
+    @Test
+    void checkCapturingMovesAtBottomRightCornerOfTheBoard() throws IllegalMoveException {
+        this.model.makeMove(BLACK, 3, 3);
+        this.model.makeMove(WHITE, 3, 4);
+        this.model.makeMove(BLACK, 4, 3);
+        this.model.makeMove(WHITE, 4, 4);
+
+        this.model.makeMove(BLACK, 5, 5);
+        this.model.makeMove(WHITE, 6, 6);
+        this.model.makeMove(BLACK, 7, 7);
+        assertEquals(this.model.getAt(6, 6), BLACK);
     }
 }
