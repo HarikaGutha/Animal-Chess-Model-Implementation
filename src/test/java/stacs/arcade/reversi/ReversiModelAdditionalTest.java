@@ -83,4 +83,15 @@ class ReversiModelAdditionalTest {
         //assertEquals(this.model.getAt(3,5), WHITE);
     }
 
+    @Test
+    void checkCapturingMovesAtBottomLeftCornerOfTheBoard() throws IllegalMoveException {
+        this.model.makeMove(BLACK, 3, 3);
+        this.model.makeMove(WHITE, 3, 4);
+        this.model.makeMove(BLACK, 4, 3);
+        this.model.makeMove(WHITE, 4, 4);
+        this.model.makeMove(BLACK,5,2);
+        this.model.makeMove(WHITE,6,1);
+        this.model.makeMove(BLACK,7,0);
+        assertEquals(this.model.getAt(6,1), BLACK);
+    }
 }
