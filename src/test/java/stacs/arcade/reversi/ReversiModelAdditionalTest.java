@@ -3,6 +3,8 @@ package stacs.arcade.reversi;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.swing.text.html.HTMLDocument;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static stacs.arcade.reversi.ReversiModel.PlayerColour.WHITE;
 import static stacs.arcade.reversi.ReversiModel.PlayerColour.BLACK;
@@ -52,5 +54,17 @@ class ReversiModelAdditionalTest {
         this.model.makeMove(WHITE, 5, 6);
         assertEquals(this.model.getNoWhiteStones(), 3);
 
+    }
+
+    @Test
+    void checkCapturingMovesAtTopLeftCornerOfTheBoard() throws IllegalMoveException {
+        this.model.makeMove(BLACK, 3, 3);
+        this.model.makeMove(WHITE, 3, 4);
+        this.model.makeMove(BLACK, 4, 3);
+        this.model.makeMove(WHITE, 4, 4);
+        this.model.makeMove(BLACK, 2,2);
+        this.model.makeMove(WHITE,1,1);
+        this.model.makeMove(BLACK,0,0);
+        assertEquals(this.model.getAt(1,1),BLACK);
     }
 }
